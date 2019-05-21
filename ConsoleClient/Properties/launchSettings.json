@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "ConsoleClient": {
+      "commandName": "Project",
+      "commandLineArgs": "https://localhost:44342/api/Files /up test.txt",
+      "workingDirectory": "C:\\Users\\thinkpad\\Desktop"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+﻿@page
+@model PersonalWebsite.Pages.Projects.IndexModel
+
+@{
+    ViewData["Title"] = "Projects";
+}
+<h2>Projects</h2>
+<p>
+    @if ((await AuthorizationService.AuthorizeAsync(
+     User, Model.Project[0], ProjectOperations.Create)).Succeeded)
+    {
+        <a asp-page="Create">Create New</a>
+    }
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project[0].URL)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Project)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a href=@Html.DisplayFor(modelItem => item.URL) style="color:antiquewhite">@Html.DisplayFor(modelItem => item.URL)</a>
+                </td>
+              
+                <td>
+                    @if ((await AuthorizationService.AuthorizeAsync(
+          User, item,
+          ProjectOperations.Update)).Succeeded)
+                    {
+                        <a asp-page="./Edit" asp-route-id="@item.ProjectId">Edit</a>
+                        <text> | </text>
+                    }
+                    <a asp-page="./Details" asp-route-id="@item.ProjectId">Details</a>
+                    @if ((await AuthorizationService.AuthorizeAsync(
+          User, item,
+          ProjectOperations.Delete)).Succeeded)
+                    {
+                        <text> | </text>
+                        <a asp-page="./Delete" asp-route-id="@item.ProjectId">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

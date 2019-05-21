@@ -1,0 +1,47 @@
+﻿@page "{id:int}"
+@model PersonalWebsite.Pages.Projects.DetailsModel
+@{
+    ViewData["Title"] = "Details";
+}
+<h2>Details</h2>
+<div>
+    <h4>Project</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Project.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.StartDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Project.StartDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Project.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.URL)
+        </dt>
+        <dd>
+            <a href="@Html.DisplayFor(model => model.Project.URL)">@Html.DisplayFor(model => model.Project.URL)</a>
+        </dd>
+    </dl>
+</div>
+
+<div>
+    @if ((await AuthorizationService.AuthorizeAsync(
+        User, Model.Project,
+        CommentOperations.Update)).Succeeded)
+    {
+        <a asp-page="./Edit" asp-route-id="@Model.Project.ProjectId">Edit</a>
+        <text> | </text>
+    }
+    <a asp-page="./Index">Back to List</a>
+</div>

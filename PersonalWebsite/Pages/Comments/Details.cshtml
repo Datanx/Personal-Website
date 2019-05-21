@@ -1,0 +1,90 @@
+@page "{id:int}"
+@model PersonalWebsite.Pages.Comments.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Comment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Comment.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Comment.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment.Content)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Comment.Content)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment.Created)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Comment.Created)
+        </dd>
+        
+        @*Precedng markup omitted for brevity.*@
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Comment.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Comment.Status)
+        </dd>
+    </dl>
+</div>
+
+@if (Model.Comment.Status != CommentStatus.Approved)
+{
+    @if ((await AuthorizationService.AuthorizeAsync(
+     User, Model.Comment, CommentOperations.Approve)).Succeeded)
+    {
+        <form style="display:inline;" method="post">
+            <input type="hidden" name="id" value="@Model.Comment.CommentId" />
+            <input type="hidden" name="status" value="@CommentStatus.Approved" />
+            <button type="submit" class="btn btn-xs btn-success">Approve</button>
+        </form>
+    }
+}
+
+@if (Model.Comment.Status != CommentStatus.Rejected)
+{
+    @if ((await AuthorizationService.AuthorizeAsync(
+     User, Model.Comment, CommentOperations.Reject)).Succeeded)
+    {
+        <form style="display:inline;" method="post">
+            <input type="hidden" name="id" value="@Model.Comment.CommentId" />
+            <input type="hidden" name="status" value="@CommentStatus.Rejected" />
+            <button type="submit" class="btn btn-xs btn-success">Reject</button>
+        </form>
+    }
+}
+
+<div>
+    @if ((await AuthorizationService.AuthorizeAsync(
+         User, Model.Comment,
+         CommentOperations.Update)).Succeeded)
+    {
+        <a asp-page="./Edit" asp-route-id="@Model.Comment.CommentId">Edit</a>
+        <text> | </text>
+    }
+    <a asp-page="./Index">Back to List</a>
+</div>
